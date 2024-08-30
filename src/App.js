@@ -150,26 +150,26 @@ const App = () => {
     );
   };
 
-  const openConnectWalletPopup = () => {
-    const width = 400;
-    const height = 600;
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-    const left = Math.floor((screenWidth - width) / 2);
-    const top = Math.floor((screenHeight - height) / 2);
+  // const openConnectWalletPopup = () => {
+  //   const width = 400;
+  //   const height = 600;
+  //   const screenWidth = window.innerWidth;
+  //   const screenHeight = window.innerHeight;
+  //   const left = Math.floor((screenWidth - width) / 2);
+  //   const top = Math.floor((screenHeight - height) / 2);
 
-    const popup = window.open(
-        `http://localhost:3001/connect?dappName=${encodeURIComponent('Demo DApp')}&dappIcon=${encodeURIComponent('https://example.com/dapp-icon.png')}&permissions=${encodeURIComponent('signTransaction,signMessage')}`,
-        'ConnectWalletPopup',
-        `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`
-    );
+  //   const popup = window.open(
+  //       `http://localhost:3001/connect?dappName=${encodeURIComponent('Demo DApp')}&dappIcon=${encodeURIComponent('https://example.com/dapp-icon.png')}&permissions=${encodeURIComponent('signTransaction,signMessage')}`,
+  //       'ConnectWalletPopup',
+  //       `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`
+  //   );
     
-    if (popup) {
-        popup.focus();
-    } else {
-        toast.error('Failed to open popup');
-    }
-  };
+  //   if (popup) {
+  //       popup.focus();
+  //   } else {
+  //       toast.error('Failed to open popup');
+  //   }
+  // };
 
   const toggleSecretKeyVisibility = () => {
     setIsSecretKeyVisible(!isSecretKeyVisible);
