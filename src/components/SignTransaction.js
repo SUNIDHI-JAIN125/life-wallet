@@ -31,21 +31,28 @@ const SignTransaction = () => {
             if (!walletString) {
                 throw new Error('No wallet found in LocalStorage');
             }
-    
+      
             // Parse the wallet object
             const wallet = JSON.parse(walletString);
+            console.log(data);
+            console.log(wallet);
+
             const { secretKey } = wallet;
+            console.log(secretKey);
     
             // Convert the private key string back to a Uint8Array
             const privateKey = Uint8Array.from(JSON.parse(secretKey));
+            console.log("private key "   + privateKey);
     
             // Create a Keypair from the secret key
             const keypair = Keypair.fromSecretKey(privateKey);
+            console.log("keypair"+keypair);
     
         
             const transaction = Transaction.from(data);
-    
+            console.log("trans" + transaction);
             transaction.sign(keypair);
+            
     
             // Return the signed transaction serialized
             return transaction.serialize();

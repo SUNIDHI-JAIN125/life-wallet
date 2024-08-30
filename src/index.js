@@ -15,5 +15,5 @@ root.render(
       <Route path="/connect" element={<ConnectWallet />} />
       <Route path="/sign" element={<SignTransaction />} />
     </Routes>
-  </Router>
+  </Router> 
 );
