@@ -179,7 +179,7 @@ const App = () => {
     <div className="App">
       <h1>Initialize Your Solana Wallet!</h1>
 
-      <button onClick={openConnectWalletPopup}>Open Connect Wallet</button>
+     {/* <button onClick={openConnectWalletPopup}>Open Connect Wallet</button> */}
 
       {!wallet ? (
         <div>
