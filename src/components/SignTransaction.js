@@ -50,7 +50,7 @@ const SignTransaction = () => {
     
         
             const transaction = Transaction.from(data);
-            console.log("trans" + transaction);
+            alert("trans" + transaction);
             transaction.sign(keypair);
             
     
