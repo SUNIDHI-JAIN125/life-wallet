@@ -1,23 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './ConnectWallet.css'; // Add your custom styles here
 
-const ConnectWallet = () => {
-    const [dappName, setDappName] = useState('');
-    const [dappIcon, setDappIcon] = useState('');
-    const [dappDescription, setDappDescription] = useState('');
+const ConnectWallet = ({ dappDetails }) => {
     const [pubkey, setPubkey] = useState('');
-
-    useEffect(() => {
-        // Extract metadata from the window opener
-        if (window.opener) {
-            const { title, icon, description } = window.opener.document;
-            setDappName(title || 'Unknown DApp');
-            setDappIcon(icon?.href || '');
-            setDappDescription(description?.content || '');
-        } else {
-            console.error('No opener found');
-        }
-    }, []);
 
     useEffect(() => {
         // Extract wallet public key from localStorage on mount
@@ -61,11 +46,11 @@ const ConnectWallet = () => {
         <div className="connect-wallet-container">
             <div className="connect-wallet-modal">
                 <header className="modal-header">
-                    <h2>Connect to {dappName}</h2>
+                    <h2>Connect to {dappDetails?.name || 'Unknown DApp'}</h2>
                 </header>
                 <div className="modal-body">
-                    {dappIcon && <img src={dappIcon} alt={`${dappName} icon`} className="dapp-icon" />}
-                    {dappDescription && <p className="dapp-description">{dappDescription}</p>}
+                    {dappDetails?.icon && <img src={dappDetails.icon} alt={`${dappDetails.name} icon`} className="dapp-icon" />}
+                    {dappDetails?.description && <p className="dapp-description">{dappDetails.description}</p>}
                 
                     <ul className="permission-list">
                         <li className="permission-title">View wallet balance & activity</li>
