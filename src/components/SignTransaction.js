@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Keypair } from '@solana/web3.js';
 import bs58 from 'bs58';
-import nacl from 'tweetnacl'; // Import nacl for signing
-import './ConnectWallet.css';
+import nacl from 'tweetnacl'; 
+import './SignTransaction.css'; 
 
 const SignTransaction = () => {
     const [transactionData, setTransactionData] = useState(null);
@@ -43,20 +43,19 @@ const SignTransaction = () => {
                 throw new Error('No secret key found in wallet');
             }
 
-            // Decode the secret key from base58
+          
             const privateKey = bs58.decode(secretKey);
             const keypair = Keypair.fromSecretKey(privateKey);
 
-            // Ensure data is a Uint8Array
+           
             if (!(data instanceof Uint8Array)) {
                 throw new Error('Transaction data must be a Uint8Array or Buffer');
             }
 
-            // Sign the data using nacl
             const signature = nacl.sign.detached(data, keypair.secretKey);
 
             console.log('Data signed successfully');
-            return signature; // Return the signature
+            return signature; 
         } catch (error) {
             console.error('Error signing data:', error);
             throw new Error('Failed to sign data: ' + (error.message || 'Unknown error'));
@@ -65,10 +64,10 @@ const SignTransaction = () => {
 
     const handleSign = async () => {
         try {
-            // Sign the transaction using your wallet's signing logic
+           
             const signature = await signWithMyWallet(transactionData);
 
-            // Send the signed data back to the opener
+      
             if (window.opener) {
                 window.opener.postMessage({ status: 'signed', signature }, '*');
                 window.close();
@@ -91,13 +90,14 @@ const SignTransaction = () => {
         <div className="sign-transaction-container">
             <div className="sign-transaction-modal">
                 <header className="modal-header">
-                    <h2>Sign Data</h2>
+                    <h2>Confirm Transaction</h2>
                 </header>
                 <div className="modal-body">
-                    <p>Do you want to sign this data? {transactionData && transactionData.toString()}</p>
+                    <p>Are you sure you want to sign this transaction?</p>
+                    <pre className="transaction-data">Transaction data <br/> {transactionData && transactionData.toString()}</pre>
                 </div>
                 <footer className="modal-footer">
-                    <button onClick={handleSign} className="sign-button">Sign</button>
+                    <button onClick={handleSign} className="confirm-button">Confirm</button>
                     <button onClick={handleCancel} className="cancel-button">Cancel</button>
                 </footer>
             </div>

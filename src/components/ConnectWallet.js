@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import './ConnectWallet.css'; // Add your custom styles here
+import './ConnectWallet.css'; 
 
 const ConnectWallet = ({ dappDetails }) => {
     const [pubkey, setPubkey] = useState('');
 
     useEffect(() => {
-        // Extract wallet public key from localStorage on mount
+        
         const savedWallet = localStorage.getItem('wallet');
         if (savedWallet) {
             const parsedWallet = JSON.parse(savedWallet);
-            const address = parsedWallet.address; // Assuming wallet is an object with address property
+            const address = parsedWallet.address; 
             if (address) {
-                setPubkey(address); // Set the public key
+                setPubkey(address); 
             } else {
                 console.error('Wallet address not found');
             }
@@ -20,7 +20,7 @@ const ConnectWallet = ({ dappDetails }) => {
 
     const handleConnect = () => {
         if (pubkey) {
-            // Post message with public key
+           
             if (window.opener) {
                 window.opener.postMessage({ status: 'connected', address: pubkey }, '*');
                 window.close();
@@ -34,7 +34,7 @@ const ConnectWallet = ({ dappDetails }) => {
 
     const handleCancel = () => {
         if (window.opener) {
-            // Post message for canceled connection
+           
             window.opener.postMessage({ status: 'cancelled' }, '*');
             window.close();
         } else {
@@ -52,12 +52,12 @@ const ConnectWallet = ({ dappDetails }) => {
                     {dappDetails?.icon && <img src={dappDetails.icon} alt={`${dappDetails.name} icon`} className="dapp-icon" />}
                     {dappDetails?.description && <p className="dapp-description">{dappDetails.description}</p>}
                 
-                    <ul className="permission-list">
-                        <li className="permission-title">View wallet balance & activity</li>
-                        <li className='permission-title'>Request approval for transactions</li>
-                    </ul>
 
                     <p className="warning-message">Make sure you trust this application before proceeding.</p>
+                        <ul className="permission-list">
+                            <li className="permission-title">This site will be able to view your public key and balance </li>
+                         
+                        </ul>
                 </div>
                 <footer className="modal-footer">
                     <button onClick={handleConnect} className="connect-button">Connect</button>

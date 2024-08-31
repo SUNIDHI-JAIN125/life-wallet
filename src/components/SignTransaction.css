@@ -1,0 +1,61 @@
+.sign-transaction-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.sign-transaction-modal {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    max-width: 90%;
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.modal-body {
+    margin: 20px 0;
+}
+
+.transaction-data {
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 14px;
+    color: #666;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.confirm-button, .cancel-button {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+.cancel-button {
+    background-color: #6c757d;
+}
+
+.confirm-button:hover, .cancel-button:hover {
+    opacity: 0.9;
+}

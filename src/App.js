@@ -5,14 +5,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Keypair, PublicKey, Connection, clusterApiUrl } from '@solana/web3.js';
 import { Buffer } from 'buffer';
 import bs58 from 'bs58';
-import { sendTransaction } from './components/transactionUtils'; // Import the sendTransaction function
-window.Buffer  = Buffer;
+import { sendTransaction } from './components/transactionUtils'; 
+
+window.Buffer = Buffer;
 const TOKEN_REGISTRY_URL = 'https://raw.githubusercontent.com/SUNIDHI-JAIN125/MetaData-Token/main/metadata.json';
 
-// Function to generate wallet
+
 const generateWallet = () => {
   const keypair = Keypair.generate();
-  const secretKey = bs58.encode(keypair.secretKey); // Convert to base58
+  const secretKey = bs58.encode(keypair.secretKey); 
   const address = keypair.publicKey.toBase58();
   
   return {
@@ -48,9 +49,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    // Retrieve wallet from localStorage on component mount
     const savedWallet = localStorage.getItem('wallet');
-    console.log(savedWallet)
     if (savedWallet) {
       setWallet(JSON.parse(savedWallet));
     }
@@ -74,7 +73,7 @@ const App = () => {
 
   const deleteWallet = () => {
     setWallet(null);
-    localStorage.removeItem('wallet'); // Remove wallet from localStorage
+    localStorage.removeItem('wallet'); 
     setBalance(null);
     setTokens([]);
     setError('');
@@ -137,6 +136,7 @@ const App = () => {
       if (transactionSignature) {
         setRecipientAddress('');
         setAmount('');
+        toast.success('Transaction sent successfully!');
       }
     } catch (error) {
       toast.error(`Failed to send transaction: ${error.message}`);
@@ -150,94 +150,79 @@ const App = () => {
     );
   };
 
-  // const openConnectWalletPopup = () => {
-  //   const width = 400;
-  //   const height = 600;
-  //   const screenWidth = window.innerWidth;
-  //   const screenHeight = window.innerHeight;
-  //   const left = Math.floor((screenWidth - width) / 2);
-  //   const top = Math.floor((screenHeight - height) / 2);
-
-  //   const popup = window.open(
-  //       `http://localhost:3001/connect?dappName=${encodeURIComponent('Demo DApp')}&dappIcon=${encodeURIComponent('https://example.com/dapp-icon.png')}&permissions=${encodeURIComponent('signTransaction,signMessage')}`,
-  //       'ConnectWalletPopup',
-  //       `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`
-  //   );
-    
-  //   if (popup) {
-  //       popup.focus();
-  //   } else {
-  //       toast.error('Failed to open popup');
-  //   }
-  // };
-
   const toggleSecretKeyVisibility = () => {
     setIsSecretKeyVisible(!isSecretKeyVisible);
   };
 
   return (
     <div className="App">
-      <h1>Initialize Your Solana Wallet!</h1>
-
-     {/* <button onClick={openConnectWalletPopup}>Open Connect Wallet</button> */}
+      <h1>Initialize Your Solana Wallet</h1>
 
       {!wallet ? (
-        <div>
+        <div className="wallet-setup">
           <button 
             onClick={createWallet} 
             disabled={loading} 
             className="create-wallet-button"
           >
-            {loading ? 'Creating wallet...' : 'Create Account'}
+            {loading ? 'Creating wallet...' : 'Create Wallet'}
           </button>
           {error && <p className="error">{error}</p>}
         </div>
       ) : (
-        <div className="wallet-details">
+        <div className="wallet-info">
           <h2>Wallet Created</h2>
-          <hr/>
-          <p><strong>Address:</strong> {wallet.address}</p>
-          <p><strong>Secret Key:</strong></p>
-          <div className="secret-key">
-            <div className="secret-key-container">
+          <hr />
+          <div className="wallet-details">
+            <p><strong>Address:</strong> {wallet.address}</p>
+            <div className="secret-key-section">
+              <p><strong>Secret Key:</strong></p>
               <textarea 
                 readOnly
-                value={isSecretKeyVisible ? wallet.secretKey : '*****'} // Conditionally display the secret key
-                rows={2} // Adjust the number of rows here
-                cols={50} // Adjust the number of columns here if needed
+                value={isSecretKeyVisible ? wallet.secretKey : '*****************************************'} 
+                rows={3}
+                cols={30}
                 className="secret-key-textarea"
               />
               <button 
                 onClick={toggleSecretKeyVisibility}
                 className="toggle-visibility-button"
               >
-                {isSecretKeyVisible ? 'Hide' : 'Show'} Key
+                {isSecretKeyVisible ? 'Hide Key' : 'Show Key'}
               </button>
               <button 
                 onClick={() => copyToClipboard(wallet.secretKey)}
                 className="copy-button"
               >
-                Copy
+                Copy Key
               </button>
             </div>
           </div>
 
           <div className="transaction-form">
             <h3>Send Transaction</h3>
-            <input
-              type="text"
-              placeholder="Recipient Address"
-              value={recipientAddress}
-              onChange={(e) => setRecipientAddress(e.target.value)}
-              className="transaction-input"
-            />
-            <input
-              type="number"
-              placeholder="Amount (SOL)"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              className="transaction-input"
-            />
+            <div className="form-group">
+              <label htmlFor="recipientAddress">Recipient Address</label>
+              <input
+                id="recipientAddress"
+                type="text"
+                placeholder="Enter recipient address"
+                value={recipientAddress}
+                onChange={(e) => setRecipientAddress(e.target.value)}
+                className="transaction-input"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="amount">Amount (SOL)</label>
+              <input
+                id="amount"
+                type="number"
+                placeholder="Enter amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="transaction-input"
+              />
+            </div>
             <button
               onClick={handleSendTransaction}
               className="send-transaction-button"
@@ -249,13 +234,13 @@ const App = () => {
           <div className="fetch-buttons">
             <button 
               onClick={fetchBalance}
-              className="fetch-balance-button"
+              className="fetch-button"
             >
               Fetch Balance
             </button>
             <button 
               onClick={fetchTokens}
-              className="fetch-tokens-button"
+              className="fetch-button"
             >
               Fetch Tokens
             </button>
@@ -266,7 +251,7 @@ const App = () => {
               Delete Wallet
             </button>
           </div>
-          
+
           {balance !== null && (
             <div className="balance-info">
               <p><strong>Balance:</strong> {balance} SOL</p>
@@ -275,23 +260,21 @@ const App = () => {
 
           {tokens.length > 0 ? (
             <div className="tokens-list">
-              <h3>Tokens:</h3>
+              <h3>Tokens</h3>
               {tokens.map((token, index) => (
                 <div key={index} className="token-item">
-                  <div className="token-info">
-                    <p>
-                      <img src={token.image} alt={token.name} className="token-image" />
-                      <br/>
-                      <a 
-                        href={`https://explorer.solana.com/account/${token.mint}?cluster=devnet`} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="token-link"
-                      >
-                        {token.name} ({token.symbol})
-                      </a>
-                    </p>
+                  <img src={token.image} alt={token.name} className="token-image" />
+                  <div className="token-details">
+                    <p><strong>Name:</strong> {token.name} ({token.symbol})</p>
                     <p><strong>Amount:</strong> {token.amount}</p>
+                    <a 
+                      href={`https://explorer.solana.com/account/${token.mint}?cluster=devnet`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="token-link"
+                    >
+                      View on Explorer
+                    </a>
                   </div>
                 </div>
               ))}

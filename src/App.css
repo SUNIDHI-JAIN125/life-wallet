@@ -1,157 +1,188 @@
 .App {
-  padding: 20px;
-  text-align: center;
   font-family: Arial, sans-serif;
-  background-color: #eee3ff;
+  text-align: center;
+  padding: 20px;
+  background-color: #f4f4f4;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 h1 {
-  padding-top: 10rem;
-  color: #5c0095;
+  padding-top: 5rem;
+  margin-bottom: 20px;
+  color: #007bff;
 }
 
-.wallet-details {
-  margin-top: 30px;
-  padding: 15px;
-  border: 1px solid darkviolet;
+.wallet-setup, .wallet-info {
+  background: #fff;
+  padding: 20px;
   border-radius: 8px;
-  background-color: #f9f9f9;
-  display: inline-block;
-  text-align: left;
-  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
   max-width: 600px;
 }
 
-.wallet-details h2 {
-  font-size: 27px;
-  margin-bottom: 30px;
-  color: darkviolet;
-  text-align: center;
-}
-
-.wallet-details p {
-  font-size: 20px;
-  margin: 20px;
-  margin-top: 20px;
-}
-
-.secret-key {
-  font-family: monospace;
-  font-size: 14px;
-  background-color: #f0f0f0;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin: 15px;
-  word-break: break-all;
-}
-
-/* Buttons */
-button {
-  padding: 13px 15px;
-  font-size: 23px;
-  font-weight: 600;
+.create-wallet-button {
+  background-color: #007bff;
+  color: #fff;
   border: none;
-  border-radius: 6px;
-  background-color: darkviolet;
-  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 10px;
+  font-size: 16px;
 }
 
-button:hover {
-  background-color: #4b0082;
-}
-
-button:disabled {
-  background-color: #dcdcdc;
+.create-wallet-button:disabled {
+  background-color: #6c757d;
   cursor: not-allowed;
 }
 
-p.error {
+.error {
   color: red;
-  font-size: 16px;
   margin-top: 10px;
+}
+
+.wallet-details {
+  margin-bottom: 20px;
+  font-size: large;
+}
+
+.secret-key-section {
+  padding-top: 10px;
+  margin: 20px 0;
+}
+
+.secret-key-textarea {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.toggle-visibility-button,
+.copy-button {
+  background-color: #007bff;
+  color: #fff;
+  border:none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 19px;
+  margin: 10px;
+  font-weight: bold;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
+}
+
+.toggle-visibility-button:hover,
+.copy-button:hover {
+  opacity: 0.7;
+}
+
+.transaction-form {
+  margin-top: 5rem;
+  padding: 30px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.transaction-input {
+  width: calc(100% - 70px);
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.send-transaction-button {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 10px 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  
+  font-size: 22px;
+  font-weight: bold;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
+}
+
+.send-transaction-button:hover {
+  opacity: 0.7;
+}
+
+.fetch-buttons {
+  margin-top: 20px;
+}
+
+.fetch-button,
+.delete-wallet-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 19px;
+  margin: 9px;
+  font-weight: bold;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
+
+}
+
+.fetch-button:hover,
+.delete-wallet-button:hover {
+  opacity: 0.7;
+}
+
+.delete-wallet-button {
+  background-color: #dc3545;
+}
+
+.balance-info {
+  margin-top: 20px;
 }
 
 .tokens-list {
   margin-top: 20px;
-  padding-left: 10px;
-}
-
-.tokens-list > h3 {
-  padding-left: 10px;
-  margin-left: 10px;
-  font-size: 20px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .token-item {
-  border: 4px solid #ddd;
-  border-radius: 4px;
-  margin: 10px 0;
-  background-color: #f9f9f9;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.no-tokens-found {
-  font-size: 16px;
-  color: #ff0606;
-  margin-top: 20px;
-  font-weight: bold;
-  padding-left: 10px;
+.token-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
-.fetch-buttons {
-  font-size: 15px;
-  padding: 10px;
-  margin: 10px;
+.token-details {
+  text-align: left;
 }
-
-
-.balance-info {
-  margin-top: 20px;
-  padding-left: 10px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
 
 .token-link {
-  color: darkviolet;
+  color: #007bff;
   text-decoration: none;
-  word-break: break-all;
-  
 }
 
 .token-link:hover {
   text-decoration: underline;
 }
 
-
-.token-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px; 
+.no-tokens-found {
+  color: #dc3545;
 }
-
-.token-info {
-  padding-bottom:10px;
-  margin-left: 10px; 
-}
-.token-info > a{
-  font-size:25px;
-}
-
-.token-image {
-  
-  width: 50px; 
-  height: 50px;
-  object-fit: contain; 
-  border-radius: 5px;
-  margin-top: 10px;
-}
-
