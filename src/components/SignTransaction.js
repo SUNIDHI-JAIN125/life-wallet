@@ -25,46 +25,34 @@ const SignTransaction = () => {
 
     const signWithMyWallet = async (data) => {
         try {
-            console.error('data is ' + data);
-
+            console.error('Received transaction data:', data);
+    
             const walletString = localStorage.getItem('wallet');
             if (!walletString) {
-                console.error('No wallet found in localstorage');
+                console.error('No wallet found in local storage');
                 throw new Error('No wallet found in LocalStorage');
             }
     
             const wallet = JSON.parse(walletString);
-
-            if(wallet)
-            {
-                console.error('No wallet '+ wallet)
-
-            }
             const { secretKey } = wallet;
-
-            if(secretKey){
-                console.error('No secretkey'+ secretKey); 
+    
+            if (!secretKey) {
+                console.error('No secret key found in wallet');
+                throw new Error('No secret key found in wallet');
             }
-
+    
             const privateKey = Uint8Array.from(JSON.parse(secretKey));
-
             const keypair = Keypair.fromSecretKey(privateKey);
-            if(keypair)
-            {
-            console.error('No keypair'+ keypair); }
-
+    
             const transaction = Transaction.from(data);
-
-            if(transaction){
-                console.error('txn txn txn ' + transaction)
-            }
-
+            console.error('Transaction Object:', transaction);
+    
             transaction.sign(keypair);
-
+            console.log('Transaction signed successfully');
     
             return transaction; // Return the signed transaction
         } catch (error) {
-            console.error('Error signing transactionnnnnnnnnnnnnnnnnn:', error);
+            console.error('Error signing transaction:', error);
             throw new Error('Failed to sign transaction: ' + (error.message || 'Unknown error'));
         }
     };
