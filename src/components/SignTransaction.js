@@ -63,12 +63,15 @@ const SignTransaction = () => {
     };
 
     const handleSign = async () => {
-        if (!transactionData) return;
+        if (!transactionData) {
+            console.error('No trasaction dataaaa');
+            return
+        }
 
         try {
             // Sign the transaction using your wallet's signing logic
             const signedTransactionData = await signWithMyWallet(transactionData);
-            alert(transactionData)
+            
             // Send the signed transaction back to the opener
             if (window.opener) {
                 window.opener.postMessage({ status: 'signed', signedTransactionData }, '*');
@@ -95,7 +98,7 @@ const SignTransaction = () => {
                     <h2>Sign Transaction</h2>
                 </header>
                 <div className="modal-body">
-                    <p>Do you want to sign this transaction?</p>
+                    <p>Do you want to sign this transaction? {transactionData}</p>
                 </div>
                 <footer className="modal-footer">
                     <button onClick={handleSign} className="sign-button">Sign</button>

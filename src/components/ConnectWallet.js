@@ -8,14 +8,15 @@ const ConnectWallet = () => {
     const [pubkey, setPubkey] = useState('');
 
     useEffect(() => {
-        // Extract metadata from the DApp's HTML
-        const title = document.title || 'Unknown DApp';
-        const icon = document.querySelector('link[rel="icon"]')?.href || '';
-        const description = document.querySelector('meta[name="description"]')?.content || '';
-
-        setDappName(title);
-        setDappIcon(icon);
-        setDappDescription(description);
+        // Extract metadata from the window opener
+        if (window.opener) {
+            const { title, icon, description } = window.opener.document;
+            setDappName(title || 'Unknown DApp');
+            setDappIcon(icon?.href || '');
+            setDappDescription(description?.content || '');
+        } else {
+            console.error('No opener found');
+        }
     }, []);
 
     useEffect(() => {
@@ -34,7 +35,6 @@ const ConnectWallet = () => {
 
     const handleConnect = () => {
         if (pubkey) {
-           
             // Post message with public key
             if (window.opener) {
                 window.opener.postMessage({ status: 'connected', address: pubkey }, '*');
