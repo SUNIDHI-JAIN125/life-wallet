@@ -23,34 +23,28 @@ const SignTransaction = () => {
         };
     }, []);
 
-
     const signWithMyWallet = async (data) => {
         try {
-            // Retrieve the wallet object from LocalStorage
             const walletString = localStorage.getItem('wallet');
             if (!walletString) {
                 throw new Error('No wallet found in LocalStorage');
             }
     
-            // Parse the wallet object
             const wallet = JSON.parse(walletString);
             const { secretKey } = wallet;
-    
-            // Convert the private key string back to a Uint8Array
             const privateKey = Uint8Array.from(JSON.parse(secretKey));
-    
-            // Create a Keypair from the secret key
             const keypair = Keypair.fromSecretKey(privateKey);
     
             const transaction = Transaction.from(data);
             transaction.sign(keypair);
     
-            return transaction;
+            return transaction; // Return the signed transaction
         } catch (error) {
             console.error('Error signing transaction:', error);
-            throw new Error('Failed to sign transaction');
+            throw new Error('Failed to sign transaction: ' + (error.message || 'Unknown error'));
         }
     };
+
 
     const handleSign = async () => {
         if (!transactionData) {
@@ -68,10 +62,10 @@ const SignTransaction = () => {
                 window.close();
             }
         } catch (error) {
-            console.error('Error signing transaction:', error);
+            console.error('Error signing transaction in handle sign:', error);
         }
     };
-    
+
     const handleCancel = () => {
         if (window.opener) {
             window.opener.postMessage({ status: 'cancelled' }, '*');
