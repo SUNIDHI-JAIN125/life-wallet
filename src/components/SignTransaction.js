@@ -31,31 +31,21 @@ const SignTransaction = () => {
             if (!walletString) {
                 throw new Error('No wallet found in LocalStorage');
             }
-      
+    
             // Parse the wallet object
             const wallet = JSON.parse(walletString);
-            console.log(data);
-            console.log(wallet);
-
             const { secretKey } = wallet;
-            console.log(secretKey);
     
             // Convert the private key string back to a Uint8Array
             const privateKey = Uint8Array.from(JSON.parse(secretKey));
-            console.log("private key "   + privateKey);
     
             // Create a Keypair from the secret key
             const keypair = Keypair.fromSecretKey(privateKey);
-            console.log("keypair"+keypair);
     
-        
             const transaction = Transaction.from(data);
-            alert("trans" + transaction);
             transaction.sign(keypair);
-            
     
-            // Return the signed transaction serialized
-            return transaction.serialize();
+            return transaction;
         } catch (error) {
             console.error('Error signing transaction:', error);
             throw new Error('Failed to sign transaction');
@@ -64,24 +54,24 @@ const SignTransaction = () => {
 
     const handleSign = async () => {
         if (!transactionData) {
-            console.error('No trasaction dataaaa');
-            return
+            console.error('No transaction data');
+            return;
         }
-
+    
         try {
             // Sign the transaction using your wallet's signing logic
-            const signedTransactionData = await signWithMyWallet(transactionData);
-            
+            const signedTransaction = await signWithMyWallet(transactionData);
+    
             // Send the signed transaction back to the opener
             if (window.opener) {
-                window.opener.postMessage({ status: 'signed', signedTransactionData }, '*');
+                window.opener.postMessage({ status: 'signed', signedTransaction }, '*');
                 window.close();
             }
         } catch (error) {
             console.error('Error signing transaction:', error);
         }
     };
-
+    
     const handleCancel = () => {
         if (window.opener) {
             window.opener.postMessage({ status: 'cancelled' }, '*');
