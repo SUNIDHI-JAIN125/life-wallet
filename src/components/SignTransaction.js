@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Keypair, Transaction } from '@solana/web3.js';
-import './ConnectWallet.css'; // Add your custom styles here
+import { Keypair } from '@solana/web3.js';
+import bs58 from 'bs58';
+import nacl from 'tweetnacl'; // Import nacl for signing
+import './ConnectWallet.css';
 
 const SignTransaction = () => {
     const [transactionData, setTransactionData] = useState(null);
 
     useEffect(() => {
-        // Listen for incoming transaction data from the parent window
         const handleMessage = (event) => {
             if (event.origin !== window.opener?.location.origin) return;
 
             const { type, data } = event.data;
+            console.log('Received message:', { type, data });
             if (type === 'signTransaction') {
-                setTransactionData(new Uint8Array(data)); // Ensure data is correctly handled
+                setTransactionData(new Uint8Array(data));
             }
-        };  
+        };
 
         window.addEventListener('message', handleMessage);
 
@@ -25,56 +27,54 @@ const SignTransaction = () => {
 
     const signWithMyWallet = async (data) => {
         try {
-            console.error('Received transaction data:', data);
-    
+            console.log('Received transaction data:', data);
+
             const walletString = localStorage.getItem('wallet');
             if (!walletString) {
                 console.error('No wallet found in local storage');
                 throw new Error('No wallet found in LocalStorage');
             }
-    
+
             const wallet = JSON.parse(walletString);
             const { secretKey } = wallet;
-    
+
             if (!secretKey) {
                 console.error('No secret key found in wallet');
                 throw new Error('No secret key found in wallet');
             }
-    
-            const privateKey = Uint8Array.from(JSON.parse(secretKey));
+
+            // Decode the secret key from base58
+            const privateKey = bs58.decode(secretKey);
             const keypair = Keypair.fromSecretKey(privateKey);
-    
-            const transaction = Transaction.from(data);
-            console.error('Transaction Object:', transaction);
-    
-            transaction.sign(keypair);
-            console.log('Transaction signed successfully');
-    
-            return transaction; // Return the signed transaction
+
+            // Ensure data is a Uint8Array
+            if (!(data instanceof Uint8Array)) {
+                throw new Error('Transaction data must be a Uint8Array or Buffer');
+            }
+
+            // Sign the data using nacl
+            const signature = nacl.sign.detached(data, keypair.secretKey);
+
+            console.log('Data signed successfully');
+            return signature; // Return the signature
         } catch (error) {
-            console.error('Error signing transaction:', error);
-            throw new Error('Failed to sign transaction: ' + (error.message || 'Unknown error'));
+            console.error('Error signing data:', error);
+            throw new Error('Failed to sign data: ' + (error.message || 'Unknown error'));
         }
     };
 
-
     const handleSign = async () => {
-        if (!transactionData) {
-            console.error('No transaction data');
-            return;
-        }
-    
         try {
             // Sign the transaction using your wallet's signing logic
-            const signedTransaction = await signWithMyWallet(transactionData);
-    
-            // Send the signed transaction back to the opener
+            const signature = await signWithMyWallet(transactionData);
+
+            // Send the signed data back to the opener
             if (window.opener) {
-                window.opener.postMessage({ status: 'signed', signedTransaction }, '*');
+                window.opener.postMessage({ status: 'signed', signature }, '*');
                 window.close();
             }
         } catch (error) {
-            console.error('Error signing transaction in handle sign:', error);
+            console.error('Error signing data in handle sign:', error);
         }
     };
 
@@ -91,10 +91,10 @@ const SignTransaction = () => {
         <div className="sign-transaction-container">
             <div className="sign-transaction-modal">
                 <header className="modal-header">
-                    <h2>Sign Transaction</h2>
+                    <h2>Sign Data</h2>
                 </header>
                 <div className="modal-body">
-                    <p>Do you want to sign this transaction? {transactionData}</p>
+                    <p>Do you want to sign this data? {transactionData && transactionData.toString()}</p>
                 </div>
                 <footer className="modal-footer">
                     <button onClick={handleSign} className="sign-button">Sign</button>
