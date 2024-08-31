@@ -60,11 +60,11 @@ const SignTransaction = () => {
             }
 
             transaction.sign(keypair);
-            
+
     
             return transaction; // Return the signed transaction
         } catch (error) {
-            console.error('Error signing transaction:', error);
+            console.error('Error signing transactionnnnnnnnnnnnnnnnnn:', error);
             throw new Error('Failed to sign transaction: ' + (error.message || 'Unknown error'));
         }
     };
