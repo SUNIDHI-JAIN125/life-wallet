@@ -9,7 +9,7 @@ const SignTransaction = () => {
 
     useEffect(() => {
         const handleMessage = (event) => {
-            if (event.origin !== window.opener?.location.origin) return;
+            // if (event.origin !== window.opener?.location.origin) return;
 
             const { type, data } = event.data;
             console.log('Received message:', { type, data });
@@ -28,6 +28,7 @@ const SignTransaction = () => {
     const signWithMyWallet = async (data) => {
         try {
             console.log('Received transaction data:', data);
+            alert(data);
 
             const walletString = localStorage.getItem('wallet');
             if (!walletString) {
@@ -64,6 +65,8 @@ const SignTransaction = () => {
 
     const handleSign = async () => {
         try {
+
+            console.log(transactionData);
            
             const signature = await signWithMyWallet(transactionData);
 
