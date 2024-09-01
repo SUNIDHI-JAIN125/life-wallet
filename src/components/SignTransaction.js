@@ -12,7 +12,7 @@ const SignTransaction = () => {
             // if (event.origin !== window.opener?.location.origin) return;
 
             const { type, data } = event.data;
-            alert(data);
+            alert(JSON.stringify(data));
             console.log('Received message:', { type, data });
             if (type === 'signTransaction') {
                 setTransactionData(new Uint8Array(data));
