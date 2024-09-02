@@ -11,11 +11,11 @@ const SignTransaction = () => {
         const params = new URLSearchParams(window.location.search);
         const transaction = params.get('transaction');
         
-
+        alert(transaction)
         if (transaction) {
            
             try {
-                alert(transaction)
+              
                 const decodedTransaction = Buffer.from(decodeURIComponent(transaction), 'base64');
                 setTransactionData(new Uint8Array(decodedTransaction));
                 alert("txn "  + transactionData)
