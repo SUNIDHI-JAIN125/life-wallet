@@ -3,6 +3,8 @@ import { Keypair } from '@solana/web3.js';
 import bs58 from 'bs58';
 import nacl from 'tweetnacl'; 
 import './SignTransaction.css'; 
+import { Buffer } from 'buffer';
+window.Buffer = Buffer;
 
 const SignTransaction = () => {
     const [transactionData, setTransactionData] = useState(null);
@@ -10,10 +12,13 @@ const SignTransaction = () => {
     useEffect(() => {
         // Retrieve transaction data from localStorage
         const transaction = localStorage.getItem('transactionData');
+        alert(transaction)
 
         if (transaction) {
+            alert(transaction)
             const decodedTransaction = Buffer.from(transaction, 'base64');
             setTransactionData(new Uint8Array(decodedTransaction));
+            alert("da " + transactionData)
         } else {
             console.error('No transaction data found in localStorage');
         }
