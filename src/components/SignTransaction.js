@@ -12,7 +12,7 @@ const SignTransaction = () => {
             // if (event.origin !== window.opener?.location.origin) return;
 
             const { type, data } = event.data;
-            alert(JSON.stringify(data));
+            alert("useeffect data is " + {...data})
             console.log('Received message:', { type, data });
             if (type === 'signTransaction') {
                 setTransactionData(new Uint8Array(data));
@@ -28,8 +28,8 @@ const SignTransaction = () => {
 
     const signWithMyWallet = async (data) => {
         try {
-            console.log('Received transaction data:', data);
-            alert(data);
+            alert("sign with my wallet"  + data)
+            // alert(data);
 
             const walletString = localStorage.getItem('wallet');
             if (!walletString) {
@@ -55,6 +55,8 @@ const SignTransaction = () => {
             }
 
             const signature = nacl.sign.detached(data, keypair.secretKey);
+            alert("signature" + {...signature})
+
 
             console.log('Data signed successfully');
             return signature; 
@@ -67,7 +69,7 @@ const SignTransaction = () => {
     const handleSign = async () => {
         try {
 
-            console.log(transactionData);
+            alert("handlesign data is " + transactionData)
            
             const signature = await signWithMyWallet(transactionData);
 
