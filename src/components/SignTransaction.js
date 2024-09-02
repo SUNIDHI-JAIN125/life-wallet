@@ -60,7 +60,7 @@ const SignTransaction = () => {
             const signedTransactionData = Buffer.from(signature).toString('base64');
     
             // Delay to ensure postMessage is sent after signing is complete
-            await new Promise(resolve => setTimeout(resolve, 100)); 
+            await new Promise(resolve => setTimeout(resolve, 5000)); 
     
             // Post the signed transaction back to the opener (wallet adapter)
             if (window.opener) {
