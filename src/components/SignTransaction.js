@@ -12,8 +12,13 @@ const SignTransaction = () => {
         const transaction = params.get('transaction');
 
         if (transaction) {
-            const decodedTransaction = Buffer.from(decodeURIComponent(transaction), 'base64');
-            setTransactionData(new Uint8Array(decodedTransaction));
+            try {
+                const decodedTransaction = Buffer.from(decodeURIComponent(transaction), 'base64');
+                setTransactionData(new Uint8Array(decodedTransaction));
+            } catch (error) {
+                console.error('Error decoding transaction:', error);
+                alert('Failed to decode transaction data');
+            }
         }
     }, []);
 
@@ -42,8 +47,9 @@ const SignTransaction = () => {
 
             return signature; 
         } catch (error) {
-            alert('Error signing data:', error);
-            throw new Error('Failed to sign data: ' + (error.message || 'Unknown error'));
+            console.error('Error signing data:', error);
+            alert('Failed to sign data: ' + (error.message || 'Unknown error'));
+            throw error;
         }
     };
 
@@ -52,26 +58,24 @@ const SignTransaction = () => {
             if (!transactionData) {
                 throw new Error('No transaction data to sign');
             }
-    
-            alert('Starting transaction signing...');
+
+            console.log('Starting transaction signing...');
             const signature = await signWithMyWallet(transactionData);
-            alert('Transaction signed:', signature);
-    
+            console.log('Transaction signed:', signature);
+
             const signedTransactionData = Buffer.from(signature).toString('base64');
-    
-            // Delay to ensure postMessage is sent after signing is complete
-            await new Promise(resolve => setTimeout(resolve, 5000)); 
-    
+
             // Post the signed transaction back to the opener (wallet adapter)
             if (window.opener) {
                 window.opener.postMessage({ status: 'signed', signedTransactionData }, '*');
                 window.close();
             }
         } catch (error) {
-            alert('Error signing data in handle sign:', error);
+            console.error('Error during handleSign:', error);
+            alert('Error during signing process: ' + (error.message || 'Unknown error'));
         }
     };
-    
+
     const handleCancel = () => {
         if (window.opener) {
             window.opener.postMessage({ status: 'cancelled' }, '*');
