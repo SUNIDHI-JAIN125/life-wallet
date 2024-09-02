@@ -42,7 +42,7 @@ const SignTransaction = () => {
 
             return signature; 
         } catch (error) {
-            console.error('Error signing data:', error);
+            alert('Error signing data:', error);
             throw new Error('Failed to sign data: ' + (error.message || 'Unknown error'));
         }
     };
@@ -53,9 +53,9 @@ const SignTransaction = () => {
                 throw new Error('No transaction data to sign');
             }
     
-            console.log('Starting transaction signing...');
+            alert('Starting transaction signing...');
             const signature = await signWithMyWallet(transactionData);
-            console.log('Transaction signed:', signature);
+            alert('Transaction signed:', signature);
     
             const signedTransactionData = Buffer.from(signature).toString('base64');
     
@@ -68,7 +68,7 @@ const SignTransaction = () => {
                 window.close();
             }
         } catch (error) {
-            console.error('Error signing data in handle sign:', error);
+            alert('Error signing data in handle sign:', error);
         }
     };
     
