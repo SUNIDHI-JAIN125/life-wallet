@@ -53,9 +53,14 @@ const SignTransaction = () => {
                 throw new Error('No transaction data to sign');
             }
     
+            console.log('Starting transaction signing...');
             const signature = await signWithMyWallet(transactionData);
+            console.log('Transaction signed:', signature);
     
             const signedTransactionData = Buffer.from(signature).toString('base64');
+    
+            // Delay to ensure postMessage is sent after signing is complete
+            await new Promise(resolve => setTimeout(resolve, 100)); 
     
             // Post the signed transaction back to the opener (wallet adapter)
             if (window.opener) {
@@ -94,6 +99,3 @@ const SignTransaction = () => {
 };
 
 export default SignTransaction;
-
-
-            
