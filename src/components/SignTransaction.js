@@ -8,34 +8,19 @@ const SignTransaction = () => {
     const [transactionData, setTransactionData] = useState(null);
 
     useEffect(() => {
-        const handleMessage = (event) => {
-            // if (event.origin !== window.opener?.location.origin) return;
-            alert(JSON.stringify(event))
-            const { type, data } = event.data;
-            // alert("useeffect data is " + data)
-            // alert("type is " + type)
-            console.log('Received message:', { type, data });
-            if (type === 'signTransaction') {
-                setTransactionData(new Uint8Array(data));
-                alert(JSON.stringify(transactionData))
-            }
-        };
+        const params = new URLSearchParams(window.location.search);
+        const transaction = params.get('transaction');
 
-        window.addEventListener('message', handleMessage);
-
-        return () => {
-            window.removeEventListener('message', handleMessage);
-        };
+        if (transaction) {
+            const decodedTransaction = Buffer.from(decodeURIComponent(transaction), 'base64');
+            setTransactionData(new Uint8Array(decodedTransaction));
+        }
     }, []);
 
     const signWithMyWallet = async (data) => {
         try {
-            alert("sign with my wallet"  + data)
-            // alert(data);
-
             const walletString = localStorage.getItem('wallet');
             if (!walletString) {
-                console.error('No wallet found in local storage');
                 throw new Error('No wallet found in LocalStorage');
             }
 
@@ -43,24 +28,18 @@ const SignTransaction = () => {
             const { secretKey } = wallet;
 
             if (!secretKey) {
-                console.error('No secret key found in wallet');
                 throw new Error('No secret key found in wallet');
             }
 
-          
             const privateKey = bs58.decode(secretKey);
             const keypair = Keypair.fromSecretKey(privateKey);
 
-           
             if (!(data instanceof Uint8Array)) {
                 throw new Error('Transaction data must be a Uint8Array or Buffer');
             }
 
             const signature = nacl.sign.detached(data, keypair.secretKey);
-            alert("signature" + {...signature})
 
-
-            console.log('Data signed successfully');
             return signature; 
         } catch (error) {
             console.error('Error signing data:', error);
@@ -70,27 +49,28 @@ const SignTransaction = () => {
 
     const handleSign = async () => {
         try {
-
-            alert("handlesign data is " + transactionData)
-           
+            if (!transactionData) {
+                throw new Error('No transaction data to sign');
+            }
+    
             const signature = await signWithMyWallet(transactionData);
-
-      
+    
+            const signedTransactionData = Buffer.from(signature).toString('base64');
+    
+            // Post the signed transaction back to the opener (wallet adapter)
             if (window.opener) {
-                window.opener.postMessage({ status: 'signed', signature }, '*');
+                window.opener.postMessage({ status: 'signed', signedTransactionData }, '*');
                 window.close();
             }
         } catch (error) {
             console.error('Error signing data in handle sign:', error);
         }
     };
-
+    
     const handleCancel = () => {
         if (window.opener) {
             window.opener.postMessage({ status: 'cancelled' }, '*');
             window.close();
-        } else {
-            console.error('No opener found');
         }
     };
 
@@ -114,3 +94,6 @@ const SignTransaction = () => {
 };
 
 export default SignTransaction;
+
+
+            
