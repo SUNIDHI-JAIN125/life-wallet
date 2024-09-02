@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './ConnectWallet.css'; 
 
-const ConnectWallet = () => {
+const ConnectWallet = ({ dappDetails }) => {
     const [pubkey, setPubkey] = useState('');
-    const [dappDetails, setDappDetails] = useState(null);
 
     useEffect(() => {
-        // Retrieve dapp details from localStorage
-        const savedDappDetails = localStorage.getItem('dappDetails');
-        if (savedDappDetails) {
-            setDappDetails(JSON.parse(savedDappDetails));
-        } else {
-            console.error('No dapp details found in localStorage');
-        }
-
-        // Retrieve wallet information
+        
         const savedWallet = localStorage.getItem('wallet');
         if (savedWallet) {
             const parsedWallet = JSON.parse(savedWallet);
@@ -29,6 +20,7 @@ const ConnectWallet = () => {
 
     const handleConnect = () => {
         if (pubkey) {
+           
             if (window.opener) {
                 window.opener.postMessage({ status: 'connected', address: pubkey }, '*');
                 window.close();
@@ -42,6 +34,7 @@ const ConnectWallet = () => {
 
     const handleCancel = () => {
         if (window.opener) {
+           
             window.opener.postMessage({ status: 'cancelled' }, '*');
             window.close();
         } else {
@@ -58,10 +51,13 @@ const ConnectWallet = () => {
                 <div className="modal-body">
                     {dappDetails?.icon && <img src={dappDetails.icon} alt={`${dappDetails.name} icon`} className="dapp-icon" />}
                     {dappDetails?.description && <p className="dapp-description">{dappDetails.description}</p>}
+                
+
                     <p className="warning-message">Make sure you trust this application before proceeding.</p>
-                    <ul className="permission-list">
-                        <li className="permission-title">This site will be able to view your public key and balance</li>
-                    </ul>
+                        <ul className="permission-list">
+                            <li className="permission-title">This site will be able to view your public key and balance </li>
+                         
+                        </ul>
                 </div>
                 <footer className="modal-footer">
                     <button onClick={handleConnect} className="connect-button">Connect</button>
@@ -72,4 +68,4 @@ const ConnectWallet = () => {
     );
 };
 
-export default ConnectWallet;
+export default ConnectWallet; 

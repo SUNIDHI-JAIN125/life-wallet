@@ -10,15 +10,15 @@ const SignTransaction = () => {
     const [transactionData, setTransactionData] = useState(null);
 
     useEffect(() => {
-        // Retrieve transaction data from localStorage
+       
         const transaction = localStorage.getItem('transactionData');
-        alert(transaction)
+       
 
         if (transaction) {
-            alert(transaction)
+         
             const decodedTransaction = Buffer.from(transaction, 'base64');
             setTransactionData(new Uint8Array(decodedTransaction));
-            alert("da " + transactionData)
+           
         } else {
             console.error('No transaction data found in localStorage');
         }
