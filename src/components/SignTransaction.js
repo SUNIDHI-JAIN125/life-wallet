@@ -12,10 +12,12 @@ const SignTransaction = () => {
             // if (event.origin !== window.opener?.location.origin) return;
 
             const { type, data } = event.data;
-            alert("useeffect data is " + {...data})
+            alert("useeffect data is " + data)
+            alert("type is " + type)
             console.log('Received message:', { type, data });
             if (type === 'signTransaction') {
                 setTransactionData(new Uint8Array(data));
+                alert(transactionData)
             }
         };
 
