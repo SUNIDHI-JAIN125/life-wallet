@@ -11,8 +11,8 @@ const SignTransaction = () => {
         const handleMessage = (event) => {
             // if (event.origin !== window.opener?.location.origin) return;
 
-            const { type, data } = event.data;
-            alert("useeffect data is " + JSON.stringify(data))
+            const { type, data } = event;
+            alert("useeffect data is " + data)
             alert("type is " + type)
             console.log('Received message:', { type, data });
             if (type === 'signTransaction') {
