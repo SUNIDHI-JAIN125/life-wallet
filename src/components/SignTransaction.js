@@ -10,11 +10,15 @@ const SignTransaction = () => {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const transaction = params.get('transaction');
+        
 
         if (transaction) {
+           
             try {
+                alert(transaction)
                 const decodedTransaction = Buffer.from(decodeURIComponent(transaction), 'base64');
                 setTransactionData(new Uint8Array(decodedTransaction));
+                alert("txn "  + transactionData)
             } catch (error) {
                 console.error('Error decoding transaction:', error);
                 alert('Failed to decode transaction data');
@@ -62,6 +66,7 @@ const SignTransaction = () => {
             console.log('Starting transaction signing...');
             const signature = await signWithMyWallet(transactionData);
             console.log('Transaction signed:', signature);
+            alert("signed 0 0" + signature)
 
             const signedTransactionData = Buffer.from(signature).toString('base64');
 
